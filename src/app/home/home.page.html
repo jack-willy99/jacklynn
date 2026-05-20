@@ -1,20 +1,208 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header class="no-bg">
+  <ion-toolbar class="no-bg">
     <ion-title>
-      Blank
+      Takanashi Hoshino
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content fullscreen="true">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <!-- SEARCH -->
+
+  <ion-searchbar
+    [(ngModel)]="query"
+    placeholder="What tune you lookin'for, fam?"
+  >
+  </ion-searchbar>
+
+  <ion-button
+    expand="block"
+    (click)="searchMusic()"
+  >
+    SEARCH
+  </ion-button>
+
+  <!-- MUSIC LIST -->
+
+  <div
+    class="music-card"
+    *ngFor="let item of musics; let i = index"
+  >
+
+    <img
+      class="thumb"
+      [src]="item.image_url"
+    >
+
+    <div class="music-info">
+
+      <h2>
+        {{ item.title }}
+      </h2>
+
+      <p>
+        {{ item.channel }}
+      </p>
+
+      <p>
+        {{ item.views }} • {{ item.upload_at }}
+      </p>
+
+    </div>
+
+    <ion-button
+      fill="clear"
+      (click)="playMusic(item, i)"
+    >
+      <i class="fa-solid fa-play"></i>
+    </ion-button>
+
   </div>
+
+  <!-- PLAYER -->
+
+  <div
+  class="player"
+  *ngIf="currentMusic"
+  [class.minimized]="isMinimized"
+>
+    <div class="player-top">
+
+  <button
+    class="minimize-btn"
+    (click)="toggleMinimize()"
+  >
+
+    <i
+      class="fa-solid"
+      [class.fa-chevron-down]="!isMinimized"
+      [class.fa-chevron-up]="isMinimized"
+    ></i>
+
+  </button>
+
+</div>
+    <!-- AUTHOR -->
+    <img
+  class="player-thumb"
+  [src]="currentMusic.image_url"
+/>
+    <div class="player-author">
+      {{ currentMusic.channel }}
+    </div>
+
+    <!-- TITLE -->
+
+    <div class="marquee">
+      <div class="marquee-text">
+        {{ currentMusic.title }}
+      </div>
+    </div>
+
+    <!-- SEEK -->
+
+    <input
+      class="seekbar"
+      type="range"
+      min="0"
+      [max]="duration"
+      [value]="currentTime"
+      (input)="seekAudio($event)"
+    >
+
+    <!-- TIME -->
+    <div class="time-row">
+      
+      <span>
+        {{ formatTime(currentTime) }}
+      </span>
+      
+      <span>
+        -{{ formatTime(duration - currentTime) }}
+      </span>
+    </div>
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+      <!-- SHUFFLE -->
+
+      <i
+        class="fa-solid fa-shuffle control-btn"
+        (click)="toggleShuffle()"
+      ></i>
+
+      <!-- PREV -->
+
+      <i
+        class="fa-solid fa-backward-step control-btn"
+        (click)="prevMusic()"
+      ></i>
+
+      <!-- PLAY -->
+
+      <div
+        class="play-btn"
+        (click)="togglePlay()"
+      >
+
+        <i
+          [class]="isPlaying
+            ? 'fa-solid fa-pause'
+            : 'fa-solid fa-play'"
+        ></i>
+
+      </div>
+    
+      <!-- NEXT -->
+
+      <i
+        class="fa-solid fa-forward-step control-btn"
+        (click)="nextMusic()"
+      ></i>
+
+      <!-- LOOP -->
+
+      <i
+        class="fa-solid fa-repeat control-btn"
+        (click)="toggleLoop()"
+      ></i>
+    </div>
+
+    <div class="lyrics-btn-wrap">
+      <button
+        class="lyrics-btn"
+        (click)="toggleLyrics()">
+        <i class="fas fa-music"></i>
+      </button>
+    </div>
+    <div
+  class="lyrics-panel"
+  [class.show]="showLyrics">
+  <div class="lyrics-header">
+    <h2>Lyrics</h2>
+    <button (click)="toggleLyrics()">
+      ✕
+    </button>
+  </div>
+<div class="lyrics-content">
+  <div
+    *ngIf="parsedLyrics.length < 1"
+    class="no-lyrics">
+    Lyrics not found 😭
+  </div>
+  <div
+    *ngFor="let line of parsedLyrics"
+    [class.active]="currentLyric?.trim() === line.text?.trim()"
+    class="lyric-line">
+    {{ line.text }}
+  </div>
+</div>
+</div>
+  </div>
+<div class="footer-text">
+  © 2026 Jacklyn. Semua hak dilindungi undang-undang.
+</div>
 </ion-content>

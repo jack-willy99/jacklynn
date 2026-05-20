@@ -49,10 +49,10 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "50kb"
                 }
-              ],
+              ]
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -129,7 +129,10 @@
     }
   },
   "cli": {
-    "schematicCollections": ["@ionic/angular-toolkit"]
+    "schematicCollections": [
+      "@ionic/angular-toolkit"
+    ],
+    "analytics": "d1818183-3abd-4762-adf7-68aaa42884e3"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
