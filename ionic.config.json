@@ -1,0 +1,7 @@
+{
+  "name": "HoshinoMusic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
